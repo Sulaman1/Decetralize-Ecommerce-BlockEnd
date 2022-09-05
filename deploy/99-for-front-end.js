@@ -3,15 +3,15 @@
 const { ethers, network } = require("hardhat");
 const { readFileSync, writeFileSync, fstat } = require("fs");
 
-const abi = "../fundmefe/constants/abi.json";
-const contractAddress = "../fundmefe/constants/contract.json";
+const abi = "../Decentralize-Ecommerce-Nextjs/constants/abi.json";
+const contractAddress = "../Decentralize-Ecommerce-Nextjs/constants/contract.json";
 
-const abiEcommerce = "../fundmefe/constants/abiEcommerce.json";
-const addressEcommerce = "../fundmefe/constants/addressEcommerce.json";
+const abiEcommerce = "../Decentralize-Ecommerce-Nextjs/constants/abiEcommerce.json";
+const addressEcommerce = "../Decentralize-Ecommerce-Nextjs/constants/addressEcommerce.json";
 
-const abiEcommerceMarket = "../fundmefe/constants/abiEcommerceMarket.json";
+const abiEcommerceMarket = "../Decentralize-Ecommerce-Nextjs/constants/abiEcommerceMarket.json";
 const addressEcommerceMarket =
-  "../fundmefe/constants/addressEcommerceMarket.json";
+  "../Decentralize-Ecommerce-Nextjs/constants/addressEcommerceMarket.json";
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
   console.log("Front End Deployment");
