@@ -6,6 +6,9 @@ const { readFileSync, writeFileSync, fstat } = require("fs");
 const abi = "../fundmefe/constants/abi.json";
 const contractAddress = "../fundmefe/constants/contract.json";
 
+const abiRFID = "../fundmefe/constants/abiRFID.json";
+const addressRFID = "../fundmefe/constants/addressRFID.json";
+
 const abiEcommerce = "../fundmefe/constants/abiEcommerce.json";
 const addressEcommerce = "../fundmefe/constants/addressEcommerce.json";
 
@@ -34,16 +37,19 @@ async function abiDeployment(deployments) {
   /**
    * Another way
    */
+  const rfid = await deployments.get("RFID");
   const chainlinkPriceFeed = await deployments.get("ChainlinkPriceFeed");
   const ecommerce = await deployments.get("Ecommerce");
   const ecommerceMarket = await deployments.get("EcommerceMarket");
 
   console.log(`
+      RFID : ${rfid.abi}    
       PriceFeed ABI:  ${chainlinkPriceFeed.abi}
       Ecommerce ABI: ${ecommerce.abi}
       Ecommerce market: ${ecommerceMarket.abi}
     `);
 
+  const Irfid = new ethers.utils.Interface(rfid.abi);
   const IchainlinkPriceFeed = new ethers.utils.Interface(
     chainlinkPriceFeed.abi
   );
@@ -52,6 +58,7 @@ async function abiDeployment(deployments) {
 
   writeFileSync(abi, IchainlinkPriceFeed.format(ethers.utils.FormatTypes.json));
   writeFileSync(abiEcommerce, Iecommerce.format(ethers.utils.FormatTypes.json));
+  writeFileSync(abiRFID, Irfid.format(ethers.utils.FormatTypes.json));
   writeFileSync(
     abiEcommerceMarket,
     IecommerceMarket.format(ethers.utils.FormatTypes.json)
@@ -71,10 +78,21 @@ async function contractAddressDeployment(deployments) {
   /**
    * Another way
    */
-
+  const rfid = await deployments.get("RFID");
   const chainlinkPriceFeed = await deployments.get("ChainlinkPriceFeed");
   const ecommerce = await deployments.get("Ecommerce");
   const ecommerceMarket = await deployments.get("EcommerceMarket");
+
+  let rfidJSON = JSON.parse(readFileSync(addressRFID, "utf8"));
+  if (chainId in rfidJSON) {
+    if (!rfidJSON[chainId].includes(rfid.address)) {
+      rfidJSON[chainId].push(rfid.address);
+    }
+  }
+  {
+    rfidJSON[chainId] = [rfid.address];
+  }
+  writeFileSync(addressRFID, JSON.stringify(rfidJSON));
 
   let contractJSON = JSON.parse(readFileSync(contractAddress, "utf8"));
   if (chainId in contractJSON) {

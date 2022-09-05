@@ -30,11 +30,20 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     ? 1
     : VERIFICATION_BLOCK_CONFIRMATIONS;
   const args = [oracle, jobId, fee, linkTokenAddress];
+
   const apiConsumer = await deploy("RFID", {
     from: deployer,
     args: args,
     log: true,
     waitConfirmations: waitBlockConfirmations,
+  });
+
+  console.log("rfid: ", apiConsumer.address);
+
+  await hre.run("fund-link", {
+    contract: apiConsumer.address,
+    linkaddress: linkTokenAddress,
+    fundamount: "10000000000000000000",
   });
 };
 
