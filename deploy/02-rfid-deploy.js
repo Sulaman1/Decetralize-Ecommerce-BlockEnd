@@ -36,6 +36,15 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     log: true,
     waitConfirmations: waitBlockConfirmations,
   });
+
+  console.log("RFID Address: ", apiConsumer.address)
+
+  await hre.run("fund-link", {
+    contract: apiConsumer.address,
+    linkaddress: linkTokenAddress,
+    fundamount: "2000000000000000000",
+  });
+
 };
 
 module.exports.tags = ["all", "rfid", "ms"];
