@@ -83,6 +83,13 @@ async function contractAddressDeployment(deployments) {
   const ecommerce = await deployments.get("Ecommerce");
   const ecommerceMarket = await deployments.get("EcommerceMarket");
 
+  console.log(`
+    RFID ADDRESS: ${rfid.address}
+    CHAINLINK ADDRESS: ${chainlinkPriceFeed.address}
+    ECOMMERCE ADDRESS: ${ecommerce.address}
+    ECOMMERCEMARKET ADDRESS: ${ecommerceMarket.address}
+  `)
+
   let rfidJSON = JSON.parse(readFileSync(addressRFID, "utf8"));
   if (chainId in rfidJSON) {
     if (!rfidJSON[chainId].includes(rfid.address)) {

@@ -65,6 +65,16 @@ module.exports = {
     localhost: {
       chainId: 31337,
     },
+    goerli: {
+      url: "https://goerli.infura.io/v3/bf2aa466a0b54373b677c2dc1b830d49",
+      accounts: [
+        "b8ed812a73ca25905a534c4afc5b0f5ba2b387727cf73e4700fe843dcb7971b6",
+        "905b79862f541aa6a594284b4f3ab485f479c641f35fa5d6023a4f9aff27cb30",
+      ],
+      gas: 2100000,
+      gasPrice: 8000000000,
+      chainId: 5,
+    },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/33b80616d03249baa458695ca6f348b4",
       accounts: [

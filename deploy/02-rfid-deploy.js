@@ -17,12 +17,22 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   //set log level to ignore non errors
   ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 
-  let linkToken = await get("LinkToken");
-  let MockOracle = await get("MockOracle");
 
-  linkTokenAddress = linkToken.address;
-  oracle = MockOracle.address;
-  additionalMessage = " --linkaddress " + linkTokenAddress;
+  let linkToken, MockOracle
+  if (developmentChains.includes(network.name)){
+    linkToken = await get("LinkToken");
+    MockOracle = await get("MockOracle"); 
+
+    linkTokenAddress = linkToken.address;
+    oracle = MockOracle.address;
+  }
+  else{
+    console.log("In else...")
+    linkTokenAddress = networkConfig[chainId]["linkToken"]
+
+    oracle = networkConfig[chainId]["oracle"]
+  }
+      
   const jobId = ethers.utils.toUtf8Bytes(networkConfig[chainId]["jobId"]);
   const fee = networkConfig[chainId]["fee"];
 
@@ -30,6 +40,10 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     ? 1
     : VERIFICATION_BLOCK_CONFIRMATIONS;
   const args = [oracle, jobId, fee, linkTokenAddress];
+
+  console.log(`
+    Args: ${args}
+  `)
 
   const apiConsumer = await deploy("RFID", {
     from: deployer,
