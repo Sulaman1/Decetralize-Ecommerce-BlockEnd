@@ -30,6 +30,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     ? 1
     : VERIFICATION_BLOCK_CONFIRMATIONS;
   const args = [oracle, jobId, fee, linkTokenAddress];
+
   const apiConsumer = await deploy("RFID", {
     from: deployer,
     args: args,

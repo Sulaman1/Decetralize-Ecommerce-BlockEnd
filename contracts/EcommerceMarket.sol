@@ -150,12 +150,13 @@ contract EcommerceMarket is ReentrancyGuard {
 
         MarketItem[] memory items = new MarketItem[](itemCount);
         for (uint256 i = 0; i < itemCount; i++) {
-            if (idToMarketItem[i].owner == address(0)) {
-                uint256 currentId = idToMarketItem[i].itemId;
-                MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
+            // if (idToMarketItem[i].sold == false) {
+            //idToMarketItem[i].owner == address(0)
+            uint256 currentId = idToMarketItem[i].itemId;
+            MarketItem storage currentItem = idToMarketItem[currentId];
+            items[currentIndex] = currentItem;
+            currentIndex += 1;
+            // }
         }
         return items;
     }
