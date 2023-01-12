@@ -1,20 +1,26 @@
 //write in front end directory (abi, contract address, chainId)
+var path = require("path");
 
 const { ethers, network } = require("hardhat");
 const { readFileSync, writeFileSync, fstat } = require("fs");
 
-const abi = "../Decentralize-Ecommerce-Nextjs/constants/abi.json";
-const contractAddress = "../Decentralize-Ecommerce-Nextjs/constants/contract.json";
+const abi = "../../Decetralize-Ecommerce-Nextjs/constants/abi.json";
+const contractAddress =
+  "../../Decetralize-Ecommerce-Nextjs/constants/contract.json";
 
-const abiRFID = "../Decentralize-Ecommerce-Nextjs/constants/abiRFID.json";
-const addressRFID = "../Decentralize-Ecommerce-Nextjs/constants/addressRFID.json";
+const abiRFID = "../../Decetralize-Ecommerce-Nextjs/constants/abiRFID.json";
+const addressRFID =
+  "../../Decetralize-Ecommerce-Nextjs/constants/addressRFID.json";
 
-const abiEcommerce = "../Decentralize-Ecommerce-Nextjs/constants/abiEcommerce.json";
-const addressEcommerce = "../Decentralize-Ecommerce-Nextjs/constants/addressEcommerce.json";
+const abiEcommerce =
+  "../../Decetralize-Ecommerce-Nextjs/constants/abiEcommerce.json";
+const addressEcommerce =
+  "../../Decetralize-Ecommerce-Nextjs/constants/addressEcommerce.json";
 
-const abiEcommerceMarket = "../Decentralize-Ecommerce-Nextjs/constants/abiEcommerceMarket.json";
+const abiEcommerceMarket =
+  "../../Decetralize-Ecommerce-Nextjs/constants/abiEcommerceMarket.json";
 const addressEcommerceMarket =
-  "../Decentralize-Ecommerce-Nextjs/constants/addressEcommerceMarket.json";
+  "../../Decetralize-Ecommerce-Nextjs/constants/addressEcommerceMarket.json";
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
   console.log("Front End Deployment");
@@ -56,11 +62,20 @@ async function abiDeployment(deployments) {
   const Iecommerce = new ethers.utils.Interface(ecommerce.abi);
   const IecommerceMarket = new ethers.utils.Interface(ecommerceMarket.abi);
 
-  writeFileSync(abi, IchainlinkPriceFeed.format(ethers.utils.FormatTypes.json));
-  writeFileSync(abiEcommerce, Iecommerce.format(ethers.utils.FormatTypes.json));
-  writeFileSync(abiRFID, Irfid.format(ethers.utils.FormatTypes.json));
   writeFileSync(
-    abiEcommerceMarket,
+    path.join(__dirname, abi),
+    IchainlinkPriceFeed.format(ethers.utils.FormatTypes.json)
+  );
+  writeFileSync(
+    path.join(__dirname, abiEcommerce),
+    Iecommerce.format(ethers.utils.FormatTypes.json)
+  );
+  writeFileSync(
+    path.join(__dirname, abiRFID),
+    Irfid.format(ethers.utils.FormatTypes.json)
+  );
+  writeFileSync(
+    path.join(__dirname, abiEcommerceMarket),
     IecommerceMarket.format(ethers.utils.FormatTypes.json)
   );
 }
@@ -88,9 +103,13 @@ async function contractAddressDeployment(deployments) {
     CHAINLINK ADDRESS: ${chainlinkPriceFeed.address}
     ECOMMERCE ADDRESS: ${ecommerce.address}
     ECOMMERCEMARKET ADDRESS: ${ecommerceMarket.address}
-  `)
+  `);
 
-  let rfidJSON = JSON.parse(readFileSync(addressRFID, "utf8"));
+  console.log("Path: ", path.join(__dirname, addressRFID));
+
+  let rfidJSON = JSON.parse(
+    readFileSync(path.join(__dirname, addressRFID), "utf8")
+  );
   if (chainId in rfidJSON) {
     if (!rfidJSON[chainId].includes(rfid.address)) {
       rfidJSON[chainId].push(rfid.address);
@@ -99,9 +118,11 @@ async function contractAddressDeployment(deployments) {
   {
     rfidJSON[chainId] = [rfid.address];
   }
-  writeFileSync(addressRFID, JSON.stringify(rfidJSON));
+  writeFileSync(path.join(__dirname, addressRFID), JSON.stringify(rfidJSON));
 
-  let contractJSON = JSON.parse(readFileSync(contractAddress, "utf8"));
+  let contractJSON = JSON.parse(
+    readFileSync(path.join(__dirname, contractAddress), "utf8")
+  );
   if (chainId in contractJSON) {
     if (!contractJSON[chainId].includes(chainlinkPriceFeed.address)) {
       contractJSON[chainId].push(chainlinkPriceFeed.address);
@@ -110,9 +131,14 @@ async function contractAddressDeployment(deployments) {
   {
     contractJSON[chainId] = [chainlinkPriceFeed.address];
   }
-  writeFileSync(contractAddress, JSON.stringify(contractJSON));
+  writeFileSync(
+    path.join(__dirname, contractAddress),
+    JSON.stringify(contractJSON)
+  );
 
-  let ecommerceJSON = JSON.parse(readFileSync(addressEcommerce, "utf8"));
+  let ecommerceJSON = JSON.parse(
+    readFileSync(path.join(__dirname, addressEcommerce), "utf8")
+  );
   if (chainId in ecommerceJSON) {
     if (!ecommerceJSON[chainId].includes(ecommerce.address)) {
       ecommerceJSON[chainId].push(ecommerce.address);
@@ -121,9 +147,14 @@ async function contractAddressDeployment(deployments) {
   {
     ecommerceJSON[chainId] = [ecommerce.address];
   }
-  writeFileSync(addressEcommerce, JSON.stringify(ecommerceJSON));
+  writeFileSync(
+    path.join(__dirname, addressEcommerce),
+    JSON.stringify(ecommerceJSON)
+  );
 
-  let eMarketJSON = JSON.parse(readFileSync(addressEcommerceMarket, "utf8"));
+  let eMarketJSON = JSON.parse(
+    readFileSync(path.join(__dirname, addressEcommerceMarket), "utf8")
+  );
   if (chainId in eMarketJSON) {
     if (!eMarketJSON[chainId].includes(ecommerceMarket.address)) {
       eMarketJSON[chainId].push(ecommerceMarket.address);
@@ -132,7 +163,10 @@ async function contractAddressDeployment(deployments) {
   {
     eMarketJSON[chainId] = [ecommerceMarket.address];
   }
-  writeFileSync(addressEcommerceMarket, JSON.stringify(eMarketJSON));
+  writeFileSync(
+    path.join(__dirname, addressEcommerceMarket),
+    JSON.stringify(eMarketJSON)
+  );
 }
 
 module.exports.tags = ["all", "frontend"];
